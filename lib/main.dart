@@ -1,4 +1,3 @@
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -7,6 +6,10 @@ void main() {
     debugShowCheckedModeBanner: false,
     title: "News App",
     home: MyApp(),
+    // routes: {
+    //   "/": (context) => const MyApp(),
+    //   Routes.newspage: (context) => const NewsPage()
+    // },
   ));
 }
 
@@ -15,8 +18,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // initHiveForFlutter();
-
     final HttpLink httpLink = HttpLink(
         "https://news-appdemo.herokuapp.com/v1/graphql",
         defaultHeaders: {
@@ -95,58 +96,61 @@ class _HomePageState extends State<HomePage> {
             //   return const Text('No repositories');
             // }
 
-            return ListView.builder(
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1),
               itemCount: repositories?.length,
               itemBuilder: (BuildContext context, int index) {
-                // final repository = repositories?[index];
-                return Card(
-                  child: Row(
+                return Container(
+                  margin: const EdgeInsets.only(
+                      top: 10, left: 10, right: 10, bottom: 5),
+                  color: Colors.lightBlue[200],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Expanded(
-                          child: Text(
+                      Text(
                         "Title: ${repositories?[index]['title']}",
-                        maxLines: 3,
-                      )),
-                      Expanded(
-                          child: Text(
-                        "URL: ${repositories?[index]['url']}",
-                        maxLines: 3,
-                      )),
-                      Expanded(
-                        child: Text(
-                          "Published At: ${repositories?[index]['publishedAt']}",
-                          maxLines: 3,
-                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Expanded(
-                          child: Text(
+                      Stack(
+                          alignment: AlignmentDirectional.topStart,
+                          children: [
+                            SizedBox(
+                              height: 150,
+                              width: 150,
+                              child: Image.network(
+                                repositories?[index]['urlToImage'],
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Text(
+                              "URL: ${repositories?[index]['url']}",
+                              maxLines: 1,
+                            )
+                          ]),
+                      Text(
+                        "Published At: ${repositories?[index]['publishedAt']}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
                         "Author: ${repositories?[index]['author']}",
-                        maxLines: 3,
-                      )),
-                      Expanded(
-                          child: Text(
-                        "Content: ${repositories?[index]['content']}",
-                        maxLines: 3,
-                      )),
-                      Expanded(
-                        child: Text(
-                          "Description: ${repositories?[index]['description']}",
-                          maxLines: 3,
-                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Expanded(
-                          child: Text(
+                      Text(
+                        "Content: ${repositories?[index]['content']}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "Description: ${repositories?[index]['description']}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
                         "H_ID: ${repositories?[index]['h_id']}",
-                        maxLines: 3,
-                      )),
-                      Expanded(
-                          child: Text(
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
                         "Source: ${repositories?[index]['source']}",
-                        maxLines: 3,
-                      )),
-                      Expanded(
-                        child:
-                            Image.network(repositories?[index]['urlToImage']),
+                        overflow: TextOverflow.ellipsis,
                       )
                     ],
                   ),
